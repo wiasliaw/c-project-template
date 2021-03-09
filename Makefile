@@ -11,6 +11,7 @@ BIN_DIR := bin
 CC := gcc
 CFLAGS := -Wall -I$(INC_DIR)
 
+INCS_FILES = $(wildcard $(INC_DIR)/*.h)
 SRCS_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJS_FILES = $(SRCS_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 TARGET_FILES := $(BIN_DIR)/$(PROD_ENTRY)
@@ -25,3 +26,9 @@ main:	$(OBJS_FILES)
 
 clean:
 	-rm $(OBJ_DIR)/*.o $(TARGET_FILES)
+
+valgrind: main
+	@valgrind --leak-check=full $(TARGET_FILES)
+
+cppcheck:
+	cppcheck -i $(INCS_FILES) $(SRCS_FILES)
